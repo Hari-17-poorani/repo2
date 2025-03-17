@@ -68,16 +68,16 @@ jobs:
             # Remove old image to prevent conflicts
             if [ "$(docker images -q $DOCKER_USERNAME/node-js:latest)" ]; then
               echo "Removing old Docker image..."
-              docker rmi $DOCKER_USERNAME/node-js:latest
+              docker rmi $DOCKER_USERNAME/dockerhub_repo:latest
             fi
 
             # Pull the latest image from Docker Hub
             echo "Pulling the latest image..."
-            docker pull $DOCKER_USERNAME/node-js:latest
+            docker pull $DOCKER_USERNAME/dockerhub_repo:latest
 
             # Run the container
             echo "Starting new container..."
-            docker run -d --name nodejs-container -p 80:80 $DOCKER_USERNAME/node-js:latest
+            docker run -d --name nodejs-container -p 80:80 $DOCKER_USERNAME/dockerhub_repo:latest
 
             # Verify the running container
             echo "Deployment completed. Running containers:"
