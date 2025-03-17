@@ -23,14 +23,14 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ${{ secrets.DOCKER_USERNAME }}/dockerhub_repo  # Changed to lowercase
+          images: ${{ secrets.DOCKER_USERNAME }}/node-js  # Changed to lowercase
       
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/dockerhub_repo:latest  # Explicitly set tag
+          tags: ${{ secrets.DOCKER_USERNAME }}/node-js:latest  # Explicitly set tag
           labels: ${{ steps.meta.outputs.labels }}
 
   # Job to deploy Docker container to EC2 instance
@@ -68,16 +68,16 @@ jobs:
             # Remove old image to prevent conflicts
             if [ "$(docker images -q $DOCKER_USERNAME/node-js:latest)" ]; then
               echo "Removing old Docker image..."
-              docker rmi $DOCKER_USERNAME/dockerhub_repo:latest
+              docker rmi $DOCKER_USERNAME/node-js:latest
             fi
 
             # Pull the latest image from Docker Hub
             echo "Pulling the latest image..."
-            docker pull $DOCKER_USERNAME/dockerhub_repo:latest
+            docker pull $DOCKER_USERNAME/node-js:latest
 
             # Run the container
             echo "Starting new container..."
-            docker run -d --name nodejs-container -p 80:80 $DOCKER_USERNAME/dockerhub_repo:latest
+            docker run -d --name nodejs-container -p 80:80 $DOCKER_USERNAME/node-js:latest
 
             # Verify the running container
             echo "Deployment completed. Running containers:"
@@ -86,4 +86,3 @@ jobs:
 
       - name: Clean up SSH private key
         run: rm -f private_key.pem  # Remove private key for security
-
