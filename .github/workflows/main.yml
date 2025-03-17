@@ -23,14 +23,14 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ${{ secrets.DOCKER_USERNAME }}/node-js  # Changed to lowercase
+          images: ${{ secrets.DOCKER_USERNAME }}/dockerhub_repo  # Changed to lowercase
       
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/node-js:latest  # Explicitly set tag
+          tags: ${{ secrets.DOCKER_USERNAME }}/dockerhub_repo:latest  # Explicitly set tag
           labels: ${{ steps.meta.outputs.labels }}
 
   # Job to deploy Docker container to EC2 instance
